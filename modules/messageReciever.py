@@ -10,8 +10,8 @@ channel = Channel.current()
 
 @channel.use(ListenerSchema(listening_events=[GroupMessage]))
 async def messageProcessor(app: Ariadne,group: Group,message: MessageChain):
-    if(message.display.lower() == "hi zike"):
+    if str(message).lower() in ["zike", "hi zike"]:
         await app.send_message(
             group,
-            MessageChain(f"I'm here.")
+            MessageChain(f"在！使用/help zike加载帮助")
         )

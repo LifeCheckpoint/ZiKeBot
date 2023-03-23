@@ -18,10 +18,17 @@ helpmessage = """
 ------------
 /help zike
  - 本页面
+zike
+ - Ping
+/err
+ - 获取最后发生的错误
+ -----------
 /sum [stp]
  - 总结最多100条消息内容
  - 每stp条消息摘取一次内容，默认为1
  - 1 ≤ stp ≤ 3
+/set_api API_KEY | clear
+ - 设置或清除API Key
 """
 @channel.use(ListenerSchema(listening_events=[GroupMessage]))
 async def get_help(app:Ariadne, group:Group, message: MessageChain):
