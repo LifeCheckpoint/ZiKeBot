@@ -20,7 +20,8 @@ channel.author("LDD")
 
 
 @channel.use(ListenerSchema(listening_events = [GroupMessage]))
-async def get_sum(app: Ariadne, group: Group, message: Annotated[MessageChain, MentionMe()]):
+async def get_sum(app: Ariadne, group: Group, message: MessageChain):
+    # summary
     if str(message)[0: 5] == "/sum ":
         # get step
         try:
@@ -37,17 +38,73 @@ async def get_sum(app: Ariadne, group: Group, message: Annotated[MessageChain, M
                     "API加载失败...用/err看看吧"
                 )
         
+        # check history num
+        if sumio.get_group_his_num(str(group)) < 30:
+            return await app.send_message(
+                group,
+                "多于30条有效消息时才能调用"
+            )
+
         # read history & summon
         his = sumio.get_group_his(str(group), 100, step)
-        if his != []:
-            res = api.get_sum(his)
-            if res != ""
 
-        
+        # get summary
+        res = api.get_sum(his)
+
+        # check whether result is avilable
+        if res != "":
+            reply = [t.replace("%d", str(step * 100)) for t in ["最近至多%d条消息总结："]]
+            return await app.send_message(
+                group,
+                choice(reply)  + "\n（没钱交电费，请少点调用）\n" + res
+            )
+        else:
+            return await app.send_message(
+                group,
+                "调用API失败，使用/err查看原因"
+            )
+    
+    # common msg
+    else:
+        sumio.write(str(message), str(group))
+
+@channel.use(ListenerSchema(listening_events = [GroupMessage]))
+async def get_err(app: Ariadne, group: Group, message: MessageChain):
+    if str(message) == "/err":
         return await app.send_message(
             group,
-            "developing..."
+            str(api.get_last_err())
         )
     
-    else:
-        pass
+@channel.use(ListenerSchema(listening_events = [GroupMessage]))
+async def get_err(app: Ariadne, group: Group, message: MessageChain):
+    if str(message) == "/err":
+        return await app.send_message(
+            group,
+            str(api.get_last_err())
+        )
+    
+@channel.use(ListenerSchema(listening_events = [GroupMessage]))
+async def set_api(app: Ariadne, group: Group, message: MessageChain):
+    if str(message)[0: 7] == "/set_api":
+        api_key = str(message).replace("/set_api", "")
+        if len(api_key) == "clear":
+            api.set_api_key("")
+            return await app.send_message(
+                group,
+                "已清除API KEY"
+            )
+        
+        elif len(api_key) < 3:
+            return await app.send_message(
+                group,
+                "API KEY不合法"
+            )
+
+        else:
+            api.set_api_key(api_key)
+            return await app.send_message(
+                group,
+                "已设置API KEY"
+            )
+            

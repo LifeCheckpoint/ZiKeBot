@@ -6,6 +6,14 @@ from pathlib import Path
 last_err = Exception()
 is_init = False
 
+def set_api_key(key: str):
+    try:
+        api_pth = Path(__file__, "..", "..","..", "data", "api.txt").resolve()
+        api_pth.write_text(key)
+    except Exception as e:
+        global last_err
+        last_err = e
+
 def get_api_key():
     try:
         api_pth = Path(__file__, "..", "..","..", "data", "api.txt").resolve()
@@ -53,3 +61,6 @@ def get_last_err():
 
 def is_initia():
     return is_init
+
+def get_last_err():
+    return last_err

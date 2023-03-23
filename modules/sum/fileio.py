@@ -9,6 +9,14 @@ def get():
         raise e
     return his
 
+def get_group_his_num(group: str):
+    allst = get()
+    try:
+        his_len = len(allst[group])
+        return his_len
+    except:
+        return 0
+
 def get_group_his(group: str, max_num: int = 100, step: int = 1):
     allst = get()
     try:
@@ -36,7 +44,6 @@ def write(msg: str, group: str):
             his[group] = [msg]
 
         his_pth.write_text(json.dumps(his), encoding="utf-8")
-    return 0
 
 def clear(group: str):
     his = get()

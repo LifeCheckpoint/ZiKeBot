@@ -1,6 +1,8 @@
 # ZiKeBot
 A personal bot.
+
 now still in developing
+
 project bases on AFLeartLey
 
 ## Configuration
@@ -12,6 +14,7 @@ project bases on AFLeartLey
   3. `poetry run python3 main.py`
 
 ## Application
-目前功能有：
+目前指令：
+  0. `/err` 获取最后错误
   1. `/sum [stp]` 完成群聊自动总结
   2. RandomRepeater
