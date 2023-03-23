@@ -12,13 +12,16 @@ from graia.saya.builtins.broadcast.schema import ListenerSchema
 channel = Channel.current()
 
 helpmessage = """
-ZiKeBot
+梓刻Bot By. LDD
 ------------
 提示：方括号为可选参数
 ------------
+/help zike
+ - 本页面
 /sum [stp]
  - 总结最多100条消息内容
  - 每stp条消息摘取一次内容，默认为1
+ - 1 ≤ stp ≤ 3
 """
 @channel.use(ListenerSchema(listening_events=[GroupMessage]))
 async def get_help(app:Ariadne, group:Group, message: MessageChain):
