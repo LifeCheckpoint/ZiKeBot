@@ -35,7 +35,7 @@ async def get_sum(app: Ariadne, group: Group, message: MessageChain):
             if not api.api_init():
                 return await app.send_message(
                     group,
-                    "API加载失败...用/err看看吧"
+                    "API加载失败...可能是未设置API Key，使用/err查看可能的其他原因"
                 )
         
         # check history num
@@ -53,6 +53,7 @@ async def get_sum(app: Ariadne, group: Group, message: MessageChain):
 
         # check whether result is avilable
         if res != "":
+            sumio.clear(str(group))
             reply = [t.replace("%d", str(step * 100)) for t in ["最近至多%d条消息总结："]]
             return await app.send_message(
                 group,
@@ -71,18 +72,17 @@ async def get_sum(app: Ariadne, group: Group, message: MessageChain):
 @channel.use(ListenerSchema(listening_events = [GroupMessage]))
 async def get_err(app: Ariadne, group: Group, message: MessageChain):
     if str(message) == "/err":
-        return await app.send_message(
+        err_text = str(api.get_last_err())
+        if err_text == "":
+            return await app.send_message(
             group,
-            str(api.get_last_err())
+            "还没有错误"
         )
-    
-@channel.use(ListenerSchema(listening_events = [GroupMessage]))
-async def get_err(app: Ariadne, group: Group, message: MessageChain):
-    if str(message) == "/err":
-        return await app.send_message(
-            group,
-            str(api.get_last_err())
-        )
+        else:
+            return await app.send_message(
+                group,
+                err_text
+            )
     
 @channel.use(ListenerSchema(listening_events = [GroupMessage]))
 async def set_api(app: Ariadne, group: Group, message: MessageChain):

@@ -1,4 +1,3 @@
-import tiktoken
 import openai
 import os
 from pathlib import Path
@@ -37,7 +36,8 @@ def api_init():
         last_err = e
         is_init = False
 
-    is_init = True
+    is_init = not (get_api_key() == "")
+    
     return is_init
 
 def get_sum(msg_his: list):
