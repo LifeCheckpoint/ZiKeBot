@@ -29,6 +29,8 @@ zike
  - 1 ≤ stp ≤ 3
 /set_api API_KEY | clear
  - 设置或清除API Key
+/get_api
+ - 获取当前的API Key
 """
 @channel.use(ListenerSchema(listening_events=[GroupMessage]))
 async def get_help(app:Ariadne, group:Group, message: MessageChain):

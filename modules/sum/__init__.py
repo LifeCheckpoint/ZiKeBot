@@ -85,6 +85,21 @@ async def get_err(app: Ariadne, group: Group, message: MessageChain):
             )
     
 @channel.use(ListenerSchema(listening_events = [GroupMessage]))
+async def get_api(app: Ariadne, group: Group, message: MessageChain):
+    if str(message) == "/get_api":
+        api_key = api.get_api_key()
+        if api_key == "":
+            return await app.send_message(
+                group,
+                "没找到API KEY..."
+            )
+        else:
+            return await app.send_message(
+                group,
+                "API KEY：" + api_key.replace(api_key[-6, -1], "******")
+            )
+
+@channel.use(ListenerSchema(listening_events = [GroupMessage]))
 async def set_api(app: Ariadne, group: Group, message: MessageChain):
     if str(message)[0: 7] == "/set_api":
         api_key = str(message).replace("/set_api", "")
