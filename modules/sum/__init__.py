@@ -50,7 +50,7 @@ async def get_sum(app: Ariadne, group: Group, message: MessageChain):
 
         # check whether result is avilable
         if res != "":
-            sumio.clear(sum.to_group_number(g_number))
+            sumio.clear(g_number)
             return await app.send_message(
                 group,
                 cm.msg("sum.reply").replace("%d", str(step * 100)) + res
