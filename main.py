@@ -14,7 +14,7 @@ saya = create(Saya)
 bcc = create(Broadcast)
 app = Ariadne(
     connection = config(
-        2435206827,
+        2873234285,
         "LDDMiao",
     ),
 )

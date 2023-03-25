@@ -22,21 +22,20 @@ channel.author("LDD")
 @channel.use(ListenerSchema(listening_events = [GroupMessage]))
 async def get_sum(app: Ariadne, group: Group, message: MessageChain):
     # summary
-    if str(message)[0: 5] == "/sum ":
+    if str(message)[0: 4] == "/sum":
         # get step
         try:
-            step = int(str(message).replace("/sum ", ""))
+            step = int(str(message).replace("/sum ", "").replace("/sum", ""))
             step = 1 if step not in range(1, 4) else step 
         except:
             step = 1
 
         # check init
-        if not api.is_initia():
-            if not api.api_init():
-                return await app.send_message(
-                    group,
-                    "API加载失败...可能是未设置API Key，使用/err查看可能的其他原因"
-                )
+        if not api.api_init():
+            return await app.send_message(
+                group,
+                "API加载失败...可能是未设置API Key，使用/err查看可能的其他原因"
+            )
         
         # check history num
         if sumio.get_group_his_num(str(group)) < 30:
@@ -96,13 +95,13 @@ async def get_api(app: Ariadne, group: Group, message: MessageChain):
         else:
             return await app.send_message(
                 group,
-                "API KEY：" + api_key.replace(api_key[-6, -1], "******")
+                "API KEY：" + api_key.replace(api_key[-11: -1], "******")
             )
 
 @channel.use(ListenerSchema(listening_events = [GroupMessage]))
 async def set_api(app: Ariadne, group: Group, message: MessageChain):
-    if str(message)[0: 7] == "/set_api":
-        api_key = str(message).replace("/set_api", "")
+    if str(message).find("/set_api") != -1:
+        api_key = str(message).replace("/set_api ", "")
         if len(api_key) == "clear":
             api.set_api_key("")
             return await app.send_message(

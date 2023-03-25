@@ -4,9 +4,9 @@ from pathlib import Path
 his_pth = Path(__file__, "..", "..","..", "data", "history.json").resolve()
 def get():
     try:
-        his = json.loads(his_pth.read_text(encoding="utf-8"))
-    except Exception as e:
-        raise e
+        his = json.loads(his_pth.read_text(encoding="utf-16"))
+    except:
+        return {}
     return his
 
 def get_group_his_num(group: str):
@@ -43,7 +43,7 @@ def write(msg: str, group: str):
         except(KeyError):
             his[group] = [msg]
 
-        his_pth.write_text(json.dumps(his), encoding="utf-8")
+        his_pth.write_text(json.dumps(his), encoding="utf-16")
 
 def clear(group: str):
     his = get()
@@ -52,7 +52,7 @@ def clear(group: str):
     except(KeyError):
         return 0
 
-    his_pth.write_text(json.dumps(his), encoding="utf-8")
+    his_pth.write_text(json.dumps(his), encoding="utf-16")
     return 0
 
 def clear_from_count(group: str, count: int):
@@ -66,7 +66,7 @@ def clear_from_count(group: str, count: int):
     except(KeyError):
         return 0
 
-    his_pth.write_text(json.dumps(his), encoding="utf-8")
+    his_pth.write_text(json.dumps(his), encoding="utf-16")
     return 0
 
 def check_msg(msg: str) -> str:

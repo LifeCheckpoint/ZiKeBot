@@ -7,7 +7,7 @@ is_init = False
 
 def set_api_key(key: str):
     try:
-        api_pth = Path(__file__, "..", "..","..", "data", "api.txt").resolve()
+        api_pth = Path(__file__, "..", "..","..", "data", "api_key.txt").resolve()
         api_pth.write_text(key)
     except Exception as e:
         global last_err
@@ -15,7 +15,7 @@ def set_api_key(key: str):
 
 def get_api_key():
     try:
-        api_pth = Path(__file__, "..", "..","..", "data", "api.txt").resolve()
+        api_pth = Path(__file__, "..", "..","..", "data", "api_key.txt").resolve()
         api_key = api_pth.read_text()
         return api_key
     except Exception as e:
