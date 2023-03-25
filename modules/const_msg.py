@@ -22,6 +22,12 @@ zike 或 hi zike - Ping
 /get_api - 获取当前的API Key
 /err - 获取最后发生的错误"""],
     
+    # ran_re
+    "ran_re.water": [
+        "水个群",
+        "冒个泡"
+    ],
+
     # sum
     "sum.api_failed": [
         "API加载失败了...可能是未设置API Key，使用/err查看可能的其他原因",

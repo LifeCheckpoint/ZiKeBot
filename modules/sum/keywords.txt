@@ -1,6 +1,5 @@
 [图片]
 /randpic
-怎么你了
 /savepic
 kfc
 /文案
@@ -10,7 +9,12 @@ V我50
 吉——
 喵呜
 凶——
-ww.bilibili.com
+www.bilibili.com
 void main
 def 
 /tex
+/help
+/set_api
+/get_api
+党
+习近
