@@ -16,12 +16,14 @@ from typing import Annotated
 
 channel = Channel.current()
 channel.name("sum")
-channel.description("消息整合")
+channel.description("使用OpenAI接口进行消息整合")
 channel.author("LDD")
 
 # summary
 @channel.use(ListenerSchema(listening_events = [GroupMessage]))
 async def get_sum(app: Ariadne, group: Group, message: MessageChain):
+    g_number = sumio.to_group_number(str(group))
+
     if str(message)[0: 4] == "/sum":
         # get step
         try:
@@ -38,21 +40,21 @@ async def get_sum(app: Ariadne, group: Group, message: MessageChain):
             )
         
         # check history num
-        if sumio.get_group_his_num(str(group)) < 30:
+        if sumio.get_group_his_num(g_number) < 30:
             return await app.send_message(
                 group,
                 cm.msg("sum.msg_limit")
             )
 
         # read history & summon
-        his = sumio.get_group_his(str(group), 100, step)
+        his = sumio.get_group_his(g_number, 100, step)
 
         # get summary
         res = api.get_sum(his)
 
         # check whether result is avilable
         if res != "":
-            sumio.clear(str(group))
+            sumio.clear(sum.to_group_number(g_number))
             return await app.send_message(
                 group,
                 cm.msg("sum.reply").replace("%d", str(step * 100)) + res
@@ -65,7 +67,7 @@ async def get_sum(app: Ariadne, group: Group, message: MessageChain):
     
     # common msg
     else:
-        sumio.write(str(message), str(group))
+        sumio.write(str(message), g_number)
 
 # getting last error
 @channel.use(ListenerSchema(listening_events = [GroupMessage]))

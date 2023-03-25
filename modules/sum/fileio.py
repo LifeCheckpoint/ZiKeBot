@@ -1,37 +1,39 @@
 import json
 from pathlib import Path
 
-his_pth = Path(__file__, "..", "..","..", "data", "history.json").resolve()
+data_dir = Path(__file__, "..", "..", "..", "data").resolve()
 
-# get history file
-def get():
+# extract group number from group name
+def to_group_number(group_name: str) -> str:
     try:
-        his = json.loads(his_pth.read_text(encoding="utf-16"))
+        left_index = group_name.rfind("(")
+        right_index = group_name.rfind(")")
+        return group_name[left_index + 1: right_index]
     except:
-        return {}
-    return his
+        return ""
 
-# get number of group's history
-def get_group_his_num(group: str):
-    allst = get()
-    try:
-        his_len = len(allst[group])
-        return his_len
-    except:
-        return 0
+# get group history file
+def get_group_file(group: str) -> Path:
+    return data_dir / ("his_" + group + ".json")
 
-# get history of a group
+# get number of group history
+def get_group_his_num(group: str) -> int:
+    return len(get_group_his(group))
+
+# get group history
 def get_group_his(group: str, max_num: int = 100, step: int = 1):
-    allst = get()
+    his_file = get_group_file(group)
     try:
-        group_his = allst[group]
-    except(KeyError):
+        with his_file.open(encoding = "utf-16") as f:
+            group_his = json.load(f)
+    except FileNotFoundError:
         return []
+
     if len(group_his) <= max_num * step:
         return group_his
     else:
         cnt = 0
-        step_his= []
+        step_his = []
         while cnt <= max_num * step:
             step_his.append(group_his[cnt])
             cnt += step
@@ -40,40 +42,25 @@ def get_group_his(group: str, max_num: int = 100, step: int = 1):
 # write group history to file
 def write(msg: str, group: str):
     if check_msg(msg) != "":
-        his = get()
-
+        his_file = get_group_file(group)
         try:
-            his[group].append(msg)
-        except(KeyError):
-            his[group] = [msg]
+            with his_file.open(encoding = "utf-16") as f:
+                his = json.load(f)
+        except FileNotFoundError:
+            his = []
 
-        his_pth.write_text(json.dumps(his), encoding="utf-16")
+        his.append(msg)
+
+        with his_file.open(mode = "w", encoding = "utf-16") as f:
+            json.dump(his, f)
 
 # clear the history of a group
 def clear(group: str):
-    his = get()
+    his_file = get_group_file(group)
     try:
-        his[group] = []
-    except(KeyError):
-        return 0
-
-    his_pth.write_text(json.dumps(his), encoding="utf-16")
-    return 0
-
-# clear the history of a group before count
-def clear_from_count(group: str, count: int):
-    """
-    删除最后第count消息前的所有消息记录
-    """
-    his = get()
-    try:
-        if len(his[group]) > count:
-            his[group] = his[group][- count - 1: -1]
-    except(KeyError):
-        return 0
-
-    his_pth.write_text(json.dumps(his), encoding="utf-16")
-    return 0
+        his_file.unlink()
+    except FileNotFoundError:
+        return
 
 # check whether msg is legal
 def check_msg(msg: str) -> str:
