@@ -3,16 +3,12 @@ from graia.ariadne.app import Ariadne
 from graia.ariadne.event.message import GroupMessage
 from graia.ariadne.message.chain import MessageChain
 from graia.ariadne.model import Group, Member
-from graia.ariadne.message.parser.base import MentionMe
 from graia.saya import Channel
 from graia.saya.builtins.broadcast.schema import ListenerSchema
 
 import modules.sum.fileio as sumio
 import modules.sum.api as api
 import modules.const_msg as cm
-
-from random import choice
-from typing import Annotated
 
 channel = Channel.current()
 channel.name("sum")

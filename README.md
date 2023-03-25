@@ -16,6 +16,7 @@ conda类似
   4. 使用poetry，运行 `poetry run python main.py` ，conda则进入虚拟环境后直接 `python main.py`
 
 ## Application
-目前主要指令：
+目前主要指令 / 功能：
   1. `zike` 或 `hi zike` Ping
-  2. `/sum [stp]` 完成群聊自动总结
+  2. 随机水群
+  3. `/sum [stp]` 完成群聊自动总结
