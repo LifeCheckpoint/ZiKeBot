@@ -24,8 +24,11 @@ def get_api_key():
         return ""
 
 def api_init():
-    # 设置代理以访问 api
+    # set proxy to access api
     # from clash
+
+    # IMPORTANT: DO NOT USE HK / TW SERVER OR THE ACCOUNT WILL BE BAN 
+
     os.environ["HTTP_PROXY"] = "http://127.0.0.1:7890"
     os.environ["HTTPS_PROXY"] = "http://127.0.0.1:7890"
 

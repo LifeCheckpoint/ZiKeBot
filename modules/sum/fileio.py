@@ -2,6 +2,8 @@ import json
 from pathlib import Path
 
 his_pth = Path(__file__, "..", "..","..", "data", "history.json").resolve()
+
+# get history file
 def get():
     try:
         his = json.loads(his_pth.read_text(encoding="utf-16"))
@@ -9,6 +11,7 @@ def get():
         return {}
     return his
 
+# get number of group's history
 def get_group_his_num(group: str):
     allst = get()
     try:
@@ -17,6 +20,7 @@ def get_group_his_num(group: str):
     except:
         return 0
 
+# get history of a group
 def get_group_his(group: str, max_num: int = 100, step: int = 1):
     allst = get()
     try:
@@ -33,7 +37,7 @@ def get_group_his(group: str, max_num: int = 100, step: int = 1):
             cnt += step
         return step_his
 
-
+# write group history to file
 def write(msg: str, group: str):
     if check_msg(msg) != "":
         his = get()
@@ -45,6 +49,7 @@ def write(msg: str, group: str):
 
         his_pth.write_text(json.dumps(his), encoding="utf-16")
 
+# clear the history of a group
 def clear(group: str):
     his = get()
     try:
@@ -55,6 +60,7 @@ def clear(group: str):
     his_pth.write_text(json.dumps(his), encoding="utf-16")
     return 0
 
+# clear the history of a group before count
 def clear_from_count(group: str, count: int):
     """
     删除最后第count消息前的所有消息记录
@@ -69,6 +75,7 @@ def clear_from_count(group: str, count: int):
     his_pth.write_text(json.dumps(his), encoding="utf-16")
     return 0
 
+# check whether msg is legal
 def check_msg(msg: str) -> str:
     """
     过滤无用消息
@@ -78,19 +85,19 @@ def check_msg(msg: str) -> str:
      - 过滤少于4个字符的消息
     """
     
-    # 字符截断
+    # clip
     if len(msg) > 30:
         msg = msg[: 30]
 
-    # 字母数
+    # alnum
     alnum = 0
     for char in msg:
-        if char.isalnum():
+        if char.isalnum() or char.isnumeric():
             alnum += 1
     if alnum > 20:
         return ""
     
-    # 关键词检测
+    # key word detection
     try:
         f = open("keywords.txt")
         filt_texts = f.read().split("\n")
@@ -102,7 +109,7 @@ def check_msg(msg: str) -> str:
     except:
         pass
 
-    # 过滤
+    # len detection
     if len(msg) <= 4:
         return ""
 

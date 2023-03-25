@@ -9,19 +9,19 @@ from graia.saya.builtins.broadcast.schema import ListenerSchema
 
 import modules.sum.fileio as sumio
 import modules.sum.api as api
+import modules.const_msg as cm
 
 from random import choice
 from typing import Annotated
 
 channel = Channel.current()
-channel.name("Sum")
+channel.name("sum")
 channel.description("消息整合")
 channel.author("LDD")
 
-
+# summary
 @channel.use(ListenerSchema(listening_events = [GroupMessage]))
 async def get_sum(app: Ariadne, group: Group, message: MessageChain):
-    # summary
     if str(message)[0: 4] == "/sum":
         # get step
         try:
@@ -34,14 +34,14 @@ async def get_sum(app: Ariadne, group: Group, message: MessageChain):
         if not api.api_init():
             return await app.send_message(
                 group,
-                "API加载失败...可能是未设置API Key，使用/err查看可能的其他原因"
+                cm.msg("sum.api_failed")
             )
         
         # check history num
         if sumio.get_group_his_num(str(group)) < 30:
             return await app.send_message(
                 group,
-                "多于30条有效消息时才能调用"
+                cm.msg("sum.msg_limit")
             )
 
         # read history & summon
@@ -53,21 +53,21 @@ async def get_sum(app: Ariadne, group: Group, message: MessageChain):
         # check whether result is avilable
         if res != "":
             sumio.clear(str(group))
-            reply = [t.replace("%d", str(step * 100)) for t in ["最近至多%d条消息总结："]]
             return await app.send_message(
                 group,
-                choice(reply)  + "\n（没钱交电费，请少点调用）\n" + res
+                cm.msg("sum.reply").replace("%d", str(step * 100)) + res
             )
         else:
             return await app.send_message(
                 group,
-                "调用API失败，使用/err查看原因"
+                cm.msg("sum.api_calling_failed")
             )
     
     # common msg
     else:
         sumio.write(str(message), str(group))
 
+# getting last error
 @channel.use(ListenerSchema(listening_events = [GroupMessage]))
 async def get_err(app: Ariadne, group: Group, message: MessageChain):
     if str(message) == "/err":
@@ -75,7 +75,7 @@ async def get_err(app: Ariadne, group: Group, message: MessageChain):
         if err_text == "":
             return await app.send_message(
             group,
-            "还没有错误"
+            cm.msg("sum.no_err")
         )
         else:
             return await app.send_message(
@@ -90,7 +90,7 @@ async def get_api(app: Ariadne, group: Group, message: MessageChain):
         if api_key == "":
             return await app.send_message(
                 group,
-                "没找到API KEY..."
+                cm.msg("sum.api_key_missing")
             )
         else:
             return await app.send_message(
@@ -106,19 +106,19 @@ async def set_api(app: Ariadne, group: Group, message: MessageChain):
             api.set_api_key("")
             return await app.send_message(
                 group,
-                "已清除API KEY"
+                cm.msg("sum.api_setting_clear")
             )
         
         elif len(api_key) < 3:
             return await app.send_message(
                 group,
-                "API KEY不合法"
+                cm.msg("sum.api_setting_illegal")
             )
 
         else:
             api.set_api_key(api_key)
             return await app.send_message(
                 group,
-                "已设置API KEY"
+                cm.msg("sum.api_setting")
             )
             
