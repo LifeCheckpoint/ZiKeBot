@@ -16,7 +16,7 @@ channel.author("LDD")
 
 @channel.use(ListenerSchema(listening_events = [GroupMessage]))
 async def random_repeator(app: Ariadne, group: Group, message: MessageChain):
-    k = ran.randint(1, 200)
+    k = ran.randint(1, 400)
     if(k == 114):
         await app.send_message(
             group,

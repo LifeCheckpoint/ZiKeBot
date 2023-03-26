@@ -15,8 +15,9 @@ msg_dict = {
 /help zike - 本页面
 zike 或 hi zike - Ping
 -----------
-/sum [stp]
-- 总结最多100条消息内容
+/sum [stp | ?]
+- 总结最多100 * stp条消息内容
+- ?表示获取当前新消息数量
 - 每stp条消息摘取一次内容，默认为1
 - 1 ≤ stp ≤ 3
 /set_api API_KEY | clear - 设置或清除API Key
@@ -30,6 +31,13 @@ zike 或 hi zike - Ping
     ],
 
     # sum
+    "sum.msg_num": [
+        "现在有%d条有效消息！"
+    ],
+    "sum.wait": [
+        "稍作等待...",
+        "等一下..."
+    ],
     "sum.api_failed": [
         "API加载失败了...可能是未设置API Key，使用/err查看可能的其他原因",
         "w(ﾟДﾟ)w API加载失败，没设置API Key嘛？使用/err查看可能的其他原因"
