@@ -27,7 +27,31 @@ async def random_repeator(app: Ariadne, group: Group, message: MessageChain):
 async def water(app: Ariadne, group: Group, message: MessageChain):
     k = ran.randint(1, 500)
     if(k == 114):
-        await app.send_message(
+        return await app.send_message(
             group,
             cm.msg("ran_re.water")
         )
+
+@channel.use(ListenerSchema(listening_events = [GroupMessage]))
+async def key_detect(app: Ariadne, group: Group, message: MessageChain):
+    msg = str(message)
+    ret = ""
+
+    if msg.replace(" ", "") == "":
+        return
+
+    if msg.replace("?", "").replace("？", "") == "":
+        ret = "?"
+
+    if msg.replace("咕", "") == "":
+        ret = "咕咕咕"
+
+    if msg.replace("6", "") == "":
+        ret = "7"
+
+    if ret != "":
+        return await app.send_message(
+                group,
+                ret
+            )
+    
