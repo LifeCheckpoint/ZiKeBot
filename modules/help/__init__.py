@@ -1,10 +1,8 @@
 from logging.config import listen
-from typing import Annotated
 from graia.ariadne.app import Ariadne
 from graia.ariadne.event.message import GroupMessage
 from graia.ariadne.message.chain import MessageChain
 from graia.ariadne.model import Group
-from graia.ariadne.message.parser.base import MatchContent
 
 from graia.saya import Channel
 from graia.saya.builtins.broadcast.schema import ListenerSchema

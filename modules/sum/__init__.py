@@ -1,4 +1,3 @@
-import re
 from graia.ariadne.app import Ariadne
 from graia.ariadne.event.message import GroupMessage
 from graia.ariadne.message.chain import MessageChain
@@ -22,11 +21,18 @@ async def get_sum(app: Ariadne, group: Group, message: MessageChain):
 
     if str(message)[0: 4] == "/sum":
         # get step
+        stp_str = str(message).replace("/sum ", "").replace("/sum", "")
         try:
-            step = int(str(message).replace("/sum ", "").replace("/sum", ""))
+            step = int(stp_str)
             step = 1 if step not in range(1, 4) else step 
         except:
-            step = 1
+            if stp_str == "?" or stp_str == "？":
+                return await app.send_message(
+                    group,
+                    cm.msg("sum.msg_num").replace("%d", str(sumio.get_group_his_num(g_number)))
+                )
+            else:
+                step = 1
 
         # check init
         if not api.api_init():
@@ -46,6 +52,10 @@ async def get_sum(app: Ariadne, group: Group, message: MessageChain):
         his = sumio.get_group_his(g_number, 100, step)
 
         # get summary
+        await app.send_message(
+                group,
+                cm.msg("sum.wait")
+            )
         res = api.get_sum(his)
 
         # check whether result is avilable
@@ -107,7 +117,7 @@ async def set_api(app: Ariadne, group: Group, message: MessageChain):
                 cm.msg("sum.api_setting_clear")
             )
         
-        elif len(api_key) < 3:
+        elif len(api_key) <= 10:
             return await app.send_message(
                 group,
                 cm.msg("sum.api_setting_illegal")
