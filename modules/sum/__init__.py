@@ -41,6 +41,19 @@ async def get_sum(app: Ariadne, group: Group, message: MessageChain):
                 cm.msg("sum.api_failed")
             )
         
+        # command checking network
+        if stp_str == "check" or stp_str == "c":
+            if api.check_net():
+                return await app.send_message(
+                    group,
+                    cm.msg("sum.check_ok")
+                )
+            else:
+                return await app.send_message(
+                    group,
+                    cm.msg("api_calling_failed")
+                )
+
         # check history num
         if sumio.get_group_his_num(g_number) < 30:
             return await app.send_message(

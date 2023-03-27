@@ -25,7 +25,7 @@ async def random_repeator(app: Ariadne, group: Group, message: MessageChain):
 
 @channel.use(ListenerSchema(listening_events = [GroupMessage]))
 async def water(app: Ariadne, group: Group, message: MessageChain):
-    k = ran.randint(1, 500)
+    k = ran.randint(1, 600)
     if(k == 114):
         return await app.send_message(
             group,

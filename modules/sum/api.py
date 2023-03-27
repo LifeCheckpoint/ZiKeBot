@@ -43,6 +43,20 @@ def api_init():
     
     return is_init
 
+def check_net() -> bool:
+    try:
+        rsp = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                    {"role": "user", "content": "若能收到该请求，回复“收到”"}]
+        )
+        if rsp.get("choices")[0]["message"]["content"] != "":
+            return True
+    except Exception as e:
+        global last_err
+        last_err = e
+        return False
+
 def get_sum(msg_his: list):
     msg = "\n".join(msg_his)
     try:
