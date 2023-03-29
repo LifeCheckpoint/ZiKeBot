@@ -11,7 +11,7 @@ from graia.ariadne.message.chain import MessageChain
 from graia.ariadne.model import Group
 from graia.broadcast import Broadcast
 from graia.saya import Saya
-
+from loguru import logger
 
 saya = create(Saya)
 bcc = create(Broadcast)
@@ -22,20 +22,20 @@ app = Ariadne(
     ),
 )
 
-print("--------")
+logger.info("--------")
 try:
     with open("config.yaml", "r") as stream:
         bot_config = yaml.safe_load(stream)
 except:
-    print("Config loaded error. Using default settings.")
+    logger.info("Config loaded error. Using default settings.")
 
 with saya.module_context():
     for module in pkgutil.iter_modules(["modules"]):
         if module.name in bot_config["unloaded_plugins"]:
-            print("Unload: " + module.name)
+            logger.info("Unload: " + module.name)
             continue
         saya.require(f"modules.{module.name}")
 
-print("--------")
+logger.info("--------")
 
 app.launch_blocking()
