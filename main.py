@@ -21,14 +21,21 @@ app = Ariadne(
         "LDDMiao",
     ),
 )
-config_path = Path(__file__, "config.yaml").resolve()
-with open(str(config_path), "r") as stream:
-    bot_config = yaml.safe_load(stream)
+
+print("--------")
+try:
+    with open("config.yaml", "r") as stream:
+        bot_config = yaml.safe_load(stream)
+except:
+    print("Config loaded error. Using default settings.")
 
 with saya.module_context():
     for module in pkgutil.iter_modules(["modules"]):
         if module.name in bot_config["unloaded_plugins"]:
+            print("Unload: " + module.name)
             continue
         saya.require(f"modules.{module.name}")
+
+print("--------")
 
 app.launch_blocking()
