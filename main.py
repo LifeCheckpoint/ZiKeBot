@@ -22,7 +22,8 @@ app = Ariadne(
     ),
 )
 
-logger.info("--------")
+logger.info("Config loading...")
+logger.info("----------------")
 try:
     with open("config.yaml", "r") as stream:
         bot_config = yaml.safe_load(stream)
@@ -36,6 +37,6 @@ with saya.module_context():
             continue
         saya.require(f"modules.{module.name}")
 
-logger.info("--------")
+logger.info("----------------")
 
 app.launch_blocking()
