@@ -27,7 +27,7 @@ try:
     with open("config.yaml", "r") as stream:
         bot_config = yaml.safe_load(stream)
 except:
-    logger.info("Config loaded error. Using default settings.")
+    logger.info("Config loaded error.")
 
 with saya.module_context():
     for module in pkgutil.iter_modules(["modules"]):

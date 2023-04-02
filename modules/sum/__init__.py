@@ -51,7 +51,7 @@ async def get_sum(app: Ariadne, group: Group, message: MessageChain):
             else:
                 return await app.send_message(
                     group,
-                    cm.msg("api_calling_failed")
+                    cm.msg("sum.api_calling_failed")
                 )
 
         # check history num
